@@ -3,10 +3,15 @@ Overview
 This project is a frontend solution for a case study provided by Indigo. It is built using React and incorporates several packages to enhance functionality and user experience.
 
 Tech Stack
+
 React: The primary technology used for building the user interface.
+
 Axios: For making API calls.
+
 React-Toastify: To show API responses and notifications.
+
 React-Modal: For implementing modal functionality.
+
 Material-UI: For UI components and styling.
 
 Start the development server:
@@ -16,6 +21,15 @@ Features:
 
 Flight Listings: Display all flights with their status, arrival time, and departure time.
 ![image](https://github.com/user-attachments/assets/7ee90af6-f084-4400-9aec-f7c84a546b03)
+
+- ON UPDATE ON FLIGHT ITS SEND TEXT AND EMAIL NOTIFICATIONS TO OPT USERS FOR THAT FLIGHT.
+  TEXT NOTIFICATION
+  ![1](https://github.com/user-attachments/assets/acdaa54a-3811-40c3-9333-163c0e02ebb6)
+
+  EMAIL NOTIFICATON
+  ![image](https://github.com/user-attachments/assets/05a70509-3171-4648-b166-af1516f171fa)
+
+ 
 
 Admin Functionality:
 -An admin account is provided by default for adding and updating flights.
