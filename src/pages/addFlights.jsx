@@ -145,10 +145,10 @@ const AddFlight = () => {
               ),
               actual_departure: res.data.actual_departure
                 ? formatDateToCustomString(res.data.actual_departure)
-                : "",
+                : null,
               actual_arrival: res.data.actual_arrival
                 ? formatDateToCustomString(res.data.actual_arrival)
-                : "",
+                : null,
             });
           }
         })
