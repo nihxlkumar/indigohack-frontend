@@ -12,21 +12,14 @@ import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import UserService from "../services/userService";
+import NotificationModal from "../components/NotificationModal";
 
 const columns = [
-  { id: "flight_no", label: "Flight Number", minWidth: 100 },
-  { id: "airline", label: "Airline", minWidth: 100 },
-  { id: "status", label: "Status", minWidth: 100 },
-  { id: "departure_gate", label: "Departure Gate", minWidth: 100 },
-  { id: "arrival_gate", label: "Arrival Gate", minWidth: 100 },
-  {
-    id: "scheduled_departure",
-    label: "Scheduled Departure",
-    minWidth: 100,
-    align: "right",
-    format: (value) => new Date(value).toLocaleString(),
-  },
+  { id: "flight_no", label: "Flight Number", minWidth: 70 },
+  { id: "airline", label: "Airline", minWidth: 70 },
+  { id: "status", label: "Status", minWidth: 70 },
+  { id: "departure_gate", label: "Departure Gate", minWidth: 70 },
+  { id: "arrival_gate", label: "Arrival Gate", minWidth: 70 },
   {
     id: "scheduled_arrival",
     label: "Scheduled Arrival",
@@ -35,8 +28,8 @@ const columns = [
     format: (value) => new Date(value).toLocaleString(),
   },
   {
-    id: "actual_departure",
-    label: "Actual Departure",
+    id: "scheduled_departure",
+    label: "Scheduled Departure",
     minWidth: 100,
     align: "right",
     format: (value) => new Date(value).toLocaleString(),
@@ -46,6 +39,13 @@ const columns = [
     label: "Actual Arrival",
     minWidth: 100,
     align: "right",
+  },
+  {
+    id: "actual_departure",
+    label: "Actual Departure",
+    minWidth: 100,
+    align: "right",
+    format: (value) => new Date(value).toLocaleString(),
   },
   {
     id: "action",
@@ -60,7 +60,8 @@ export default function StickyHeadTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [flights, setFlights] = useState([]);
   const [user, setUser] = useState(null);
-  const [disableNotification, setDisableNotification] = useState(false);
+  const [isModelOpen, setIsModalOpen] = useState(false);
+  const [slectedFlightId, setSlectedFlightId] = useState(null);
   let intervalId;
 
   const fetchAllFlights = () => {
@@ -80,26 +81,6 @@ export default function StickyHeadTable() {
       .catch((err) => {
         toast.error("An error occurred while fetching flights");
         if (intervalId) clearInterval(intervalId);
-      });
-  };
-
-  const addOrRemoveNotification = (id) => {
-    setDisableNotification(true);
-    UserService.addOrRemoveNotification({
-      token: user.token,
-      flight_id: id,
-      method: "text",
-    })
-      .then((res) => {
-        toast.success(
-          res.data ? "Added for Notification." : "Removed from Notification."
-        );
-      })
-      .catch((error) => {
-        toast.error(`Error: ${error.message}`);
-      })
-      .finally(() => {
-        setDisableNotification(false);
       });
   };
 
@@ -137,81 +118,99 @@ export default function StickyHeadTable() {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
 
+  const onModalOpen = () => {};
+
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {flights
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = [
-                        "scheduled_departure",
-                        "scheduled_arrival",
-                        "actual_departure",
-                        "actual_arrival",
-                      ].includes(column.id)
-                        ? formatDate(row[column.id])
-                        : row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.id === "action" ? (
-                            user?.email === "admin@indigowithme.com" ? (
-                              <Button
-                                color="primary"
-                                component={Link}
-                                to={`/update-flight/${row?.id}`}
-                              >
-                                update
-                              </Button>
+    <>
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {flights
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.code}
+                    >
+                      {columns.map((column) => {
+                        const value = [
+                          "scheduled_departure",
+                          "scheduled_arrival",
+                          "actual_departure",
+                          "actual_arrival",
+                        ].includes(column.id)
+                          ? row[column.id] ? formatDate(row[column.id]) : '--'
+                          : row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.id === "action" ? (
+                              user?.email === "admin@indigowithme.com" ? (
+                                <Button
+                                  color="primary"
+                                  component={Link}
+                                  to={`/update-flight/${row?.id}`}
+                                >
+                                  update
+                                </Button>
+                              ) : (
+                                <Button
+                                  color="primary"
+                                  onClick={() => {
+                                    setSlectedFlightId(row.id);
+                                    setIsModalOpen(true);
+                                  }}
+                                >
+                                  <NotificationsIcon />
+                                </Button>
+                              )
+                            ) : column.format && typeof value === "number" ? (
+                              column.format(value)
                             ) : (
-                              <Button
-                                color="primary"
-                                onClick={() => addOrRemoveNotification(row.id)}
-                                disabled={disableNotification}
-                              >
-                                <NotificationsIcon />
-                              </Button>
-                            )
-                          ) : column.format && typeof value === "number" ? (
-                            column.format(value)
-                          ) : (
-                            value
-                          )}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={flights.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+                              value
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={flights.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+
+      <NotificationModal
+        isModalOpen={isModelOpen}
+        setIsModalOpen={setIsModalOpen}
+        flight_id={slectedFlightId}
+        userToken={user?.token}
       />
-    </Paper>
+    </>
   );
 }

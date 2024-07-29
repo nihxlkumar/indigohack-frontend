@@ -28,7 +28,7 @@ const Navbar = () => {
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
-            MyApp
+            Indigo With Me
           </NavLink>
         </Typography>
         {user ? (

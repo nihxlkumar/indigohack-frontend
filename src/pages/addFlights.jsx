@@ -16,7 +16,7 @@ const AddFlight = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [flightData, setFlightData] = useState({
-    id: undefined,
+    id: "",
     flight_no: "",
     airline: "",
     status: "",
@@ -24,9 +24,24 @@ const AddFlight = () => {
     arrival_gate: "",
     scheduled_departure: "",
     scheduled_arrival: "",
-    actual_departure: null,
-    actual_arrival: null,
+    actual_departure: "",
+    actual_arrival: "",
   });
+
+  const resetFlightData = () => {
+    setFlightData({
+      id: "",
+      flight_no: "",
+      airline: "",
+      status: "",
+      departure_gate: "",
+      arrival_gate: "",
+      scheduled_departure: "",
+      scheduled_arrival: "",
+      actual_departure: "",
+      actual_arrival: "",
+    });
+  };
 
   const airlines = [
     "IndiGo",
@@ -82,18 +97,7 @@ const AddFlight = () => {
       FlightService.updateFlight({ ...flightData, token })
         .then((res) => {
           toast.success("Flight Updated Successfully");
-          setFlightData({
-            id: undefined,
-            flight_no: "",
-            airline: "",
-            status: "",
-            departure_gate: "",
-            arrival_gate: "",
-            scheduled_departure: "",
-            scheduled_arrival: "",
-            actual_departure: null,
-            actual_arrival: null,
-          });
+          resetFlightData();
           navigate("/");
         })
         .catch((err) => {
@@ -104,17 +108,7 @@ const AddFlight = () => {
       FlightService.addFlight({ ...flightData, token })
         .then((res) => {
           toast.success("Flight Added Successfully");
-          setFlightData({
-            flight_no: "",
-            airline: "",
-            status: "",
-            departure_gate: "",
-            arrival_gate: "",
-            scheduled_departure: "",
-            scheduled_arrival: "",
-            actual_departure: "",
-            actual_arrival: "",
-          });
+          resetFlightData();
           navigate("/");
         })
         .catch((err) => {
@@ -124,17 +118,15 @@ const AddFlight = () => {
   };
 
   const isFormValid = () => {
-    return flightData.flight_no &&
+    return (
+      flightData.flight_no &&
       flightData.airline &&
       flightData.status &&
       flightData.departure_gate &&
       flightData.arrival_gate &&
       flightData.scheduled_departure &&
       flightData.scheduled_arrival
-      // && !params.id
-      // ? true
-      // : flightData.actual_departure && flightData.actual_arrival;
-      && flightData.actual_departure && flightData.actual_arrival;
+    );
   };
 
   useEffect(() => {
@@ -151,10 +143,12 @@ const AddFlight = () => {
               scheduled_arrival: formatDateToCustomString(
                 res.data.scheduled_arrival
               ),
-              actual_departure: formatDateToCustomString(
-                res.data.actual_departure
-              ),
-              actual_arrival: formatDateToCustomString(res.data.actual_arrival),
+              actual_departure: res.data.actual_departure
+                ? formatDateToCustomString(res.data.actual_departure)
+                : "",
+              actual_arrival: res.data.actual_arrival
+                ? formatDateToCustomString(res.data.actual_arrival)
+                : "",
             });
           }
         })
@@ -214,15 +208,6 @@ const AddFlight = () => {
               ))}
             </TextField>
             <TextField
-              label="Departure Gate"
-              name="departure_gate"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={flightData.departure_gate}
-              onChange={handleChange}
-            />
-            <TextField
               label="Arrival Gate"
               name="arrival_gate"
               variant="outlined"
@@ -232,17 +217,13 @@ const AddFlight = () => {
               onChange={handleChange}
             />
             <TextField
-              label="Scheduled Departure"
-              name="scheduled_departure"
-              type="datetime-local"
+              label="Departure Gate"
+              name="departure_gate"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={flightData.scheduled_departure}
+              value={flightData.departure_gate}
               onChange={handleChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
             <TextField
               label="Scheduled Arrival"
@@ -258,13 +239,13 @@ const AddFlight = () => {
               }}
             />
             <TextField
-              label="Actual Departure"
-              name="actual_departure"
+              label="Scheduled Departure"
+              name="scheduled_departure"
               type="datetime-local"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={flightData.actual_departure}
+              value={flightData.scheduled_departure}
               onChange={handleChange}
               InputLabelProps={{
                 shrink: true,
@@ -283,6 +264,19 @@ const AddFlight = () => {
                 shrink: true,
               }}
             />
+            <TextField
+              label="Actual Departure"
+              name="actual_departure"
+              type="datetime-local"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={flightData.actual_departure}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
             <Box mt={2}>
               <Button
                 variant="contained"
@@ -291,7 +285,7 @@ const AddFlight = () => {
                 onClick={handleSaveFlight}
                 disabled={!isFormValid()}
               >
-                {params.id ? "Update" : "Edit"} Flight
+                {params.id ? "Update" : "Add"} Flight
               </Button>
             </Box>
           </Box>
