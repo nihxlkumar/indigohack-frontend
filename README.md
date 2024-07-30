@@ -41,10 +41,11 @@ This project is a frontend solution for a case study from Indigo. It displays fl
   - Device notification
 ![App Screenshot](https://github.com/user-attachments/assets/276a24b7-5d5a-4139-809d-6b685d483b61)
 
-![App Screenshot](https://github.com/user-attachments/assets/acdaa54a-3811-40c3-9333-163c0e02ebb6)
+![App Screenshot](https://github.com/user-attachments/assets/0a4cf089-9a45-49c0-bdef-ba5158246af8)
+
 
   - Text notification
-![App Screenshot](https://github.com/user-attachments/assets/7ee90af6-f084-4400-9aec-f7c84a546b03)
+![App Screenshot](https://github.com/user-attachments/assets/acdaa54a-3811-40c3-9333-163c0e02ebb6)
 
   - Email notification
 ![App Screenshot](https://github.com/user-attachments/assets/05a70509-3171-4648-b166-af1516f171fa)
@@ -74,9 +75,3 @@ This project is a frontend solution for a case study from Indigo. It displays fl
 ![App Screenshot](https://github.com/user-attachments/assets/4d0ab93d-b6d6-4187-9789-881bb400613d)
 
 ![App Screenshot](https://github.com/user-attachments/assets/10e166f3-82aa-42af-b03e-86ab2690231a)
-
-
-
-
-
-
