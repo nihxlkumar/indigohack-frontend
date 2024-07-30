@@ -9,6 +9,14 @@ const UserService = {
       throw new Error(`Error: ${error.message}`);
     }
   },
+  storeToken: async (data) => {
+    try {
+      const response = await axios.put("/user/add-device-token", data);
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error: ${error.message}`);
+    }
+  },
 };
 
 export default UserService;

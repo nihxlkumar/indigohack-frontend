@@ -12,7 +12,7 @@ const NotificationModal = ({
 }) => {
   const [selectedNotification, setSelectedNotification] = useState("");
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
-  const notificationList = ["Text", "Email", "None"];
+  const notificationList = ["Text", "Email", "App", "None"];
 
   const closeModal = () => {
     setIsModalOpen(false);

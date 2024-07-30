@@ -13,6 +13,10 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import NotificationModal from "../components/NotificationModal";
+import { getToken } from "firebase/messaging";
+import { messaging } from "../firebase";
+import UserService from "../services/userService";
+const vapidKey = import.meta.env.VITE_VAPID_KEY;
 
 const columns = [
   { id: "flight_no", label: "Flight Number", minWidth: 70 },
@@ -84,16 +88,6 @@ export default function StickyHeadTable() {
       });
   };
 
-  useEffect(() => {
-    fetchAllFlights();
-    const intervalIdd = setInterval(fetchAllFlights, 5000);
-    intervalId = intervalIdd;
-
-    return () => {
-      clearInterval(intervalIdd);
-    };
-  }, []);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -118,7 +112,44 @@ export default function StickyHeadTable() {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
 
-  const onModalOpen = () => {};
+  const getNotificationRequestPermission = async () => {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      const storedUser = localStorage.getItem("user");
+      if (
+        storedUser &&
+        JSON.parse(storedUser).email !== "admin@indigowithme.com"
+      ) {
+        const storedDeviceToken = localStorage.getItem("device_token_stored_for_user");
+        if (!storedDeviceToken || !storedDeviceToken === JSON.parse(storedUser).token) {
+          const token = await getToken(messaging, {
+            vapidKey,
+          });
+          UserService.storeToken({
+            token: JSON.parse(storedUser).token,
+            device_token: token,
+          });
+          localStorage.setItem(
+            "device_token_stored_for_user",
+            JSON.parse(storedUser).token
+          );
+        }
+      }
+    } else if (permission === "denied") {
+      alert("You denied for app notfications.");
+    }
+  };
+
+  useEffect(() => {
+    fetchAllFlights();
+    getNotificationRequestPermission();
+    const intervalIdd = setInterval(fetchAllFlights, 5000);
+    intervalId = intervalIdd;
+
+    return () => {
+      clearInterval(intervalIdd);
+    };
+  }, []);
 
   return (
     <>
@@ -156,7 +187,9 @@ export default function StickyHeadTable() {
                           "actual_departure",
                           "actual_arrival",
                         ].includes(column.id)
-                          ? row[column.id] ? formatDate(row[column.id]) : '--'
+                          ? row[column.id]
+                            ? formatDate(row[column.id])
+                            : "--"
                           : row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
