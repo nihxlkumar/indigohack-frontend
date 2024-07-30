@@ -37,7 +37,7 @@ This project is a frontend solution for a case study from Indigo. It displays fl
 - Flight Listings: Display all flights with their status, arrival time, and departure time.
 ![App Screenshot](https://github.com/user-attachments/assets/7ee90af6-f084-4400-9aec-f7c84a546b03)
 
-- On update i flight it sends notifications to opt-in users.
+- On update in flight it sends notifications to opt-in users.
   - Device notification
 ![App Screenshot](https://github.com/user-attachments/assets/276a24b7-5d5a-4139-809d-6b685d483b61)
 
