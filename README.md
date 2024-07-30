@@ -8,14 +8,15 @@ React: The primary technology used for building the user interface.
 
 Axios: For making API calls.
 
+firebase: 
+
 React-Toastify: To show API responses and notifications.
 
 React-Modal: For implementing modal functionality.
 
 Material-UI: For UI components and styling.
 
-Start the development server:
-npm run dev
+
 
 Features:
 
@@ -23,10 +24,21 @@ Flight Listings: Display all flights with their status, arrival time, and depart
 ![image](https://github.com/user-attachments/assets/7ee90af6-f084-4400-9aec-f7c84a546b03)
 
 - ON UPDATE ON FLIGHT ITS SEND TEXT AND EMAIL NOTIFICATIONS TO OPT USERS FOR THAT FLIGHT.
+
+  DEVICE NOTIFICATION
+  
+![Screenshot (2)](https://github.com/user-attachments/assets/276a24b7-5d5a-4139-809d-6b685d483b61)
+
+![Screenshot (3)](https://github.com/user-attachments/assets/16f3c20c-3518-4f2d-8701-0e865bae6470)
+
+
+
   TEXT NOTIFICATION
+  
   ![1](https://github.com/user-attachments/assets/acdaa54a-3811-40c3-9333-163c0e02ebb6)
 
   EMAIL NOTIFICATON
+  
   ![image](https://github.com/user-attachments/assets/05a70509-3171-4648-b166-af1516f171fa)
 
  
