@@ -1,5 +1,5 @@
 
-# Indigo Case Study 
+# Indigo Case Study Frontend Solution
 
 This project is a frontend solution for a case study from Indigo. It displays flights and sends notifications for flight status changes via SMS, email, or app notifications.
 
@@ -75,3 +75,9 @@ This project is a frontend solution for a case study from Indigo. It displays fl
 ![App Screenshot](https://github.com/user-attachments/assets/4d0ab93d-b6d6-4187-9789-881bb400613d)
 
 ![App Screenshot](https://github.com/user-attachments/assets/10e166f3-82aa-42af-b03e-86ab2690231a)
+
+
+
+## Backend Link
+
+[https://github.com/nihxlkumar/indigohack-backend](https://github.com/nihxlkumar/indigohack-backend)
